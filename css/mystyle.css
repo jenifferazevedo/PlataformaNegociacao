@@ -1,0 +1,11 @@
+h1 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-top: 0;
+  padding: 20px 0px 20px 0px;
+  color: #fff;
+  background: rgb(44,105,157);
+  background: linear-gradient(133deg, rgba(44,105,157,1) 0%, rgba(41,97,147,1) 61%);
+}
+th, td {
+  background: #fff;
+}
