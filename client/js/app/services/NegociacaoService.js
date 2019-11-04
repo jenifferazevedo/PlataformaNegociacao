@@ -35,4 +35,14 @@ class NegociacaoService {
           throw new Error('Não foi possível importar as negociações da semana retrasada');
         });
   }
+  obterNegociacoes() {
+    return Promise.all([this.obterNegociacoesDaSemana(), 
+      this.obterNegociacoesDaSemanaAnterior(), 
+      this.obterNegociacoesDaSemanaRetrasada()])
+      .then(periodos => {
+        let negociacoes = periodos.reduce((dados, periodo) => dados.concat(periodo), []);
+        return negociacoes;
+      })
+      .catch(error => {throw new Error(error)});
+  }
 }
