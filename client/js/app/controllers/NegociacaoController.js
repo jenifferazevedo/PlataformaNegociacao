@@ -15,14 +15,13 @@ class NegociacaoController {
   }
   importarNegociacoes() {
     let service = new NegociacaoService();
-    service.obterNegociacoesDaSemana((erro, negociacoes) => {
-      if(erro) {
-        this._mensagem.texto = erro;
-        return;
-      }
-      negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
-      this._mensagem.texto = 'Negociações importadas com sucesso';
-    });
+    Promise.all([service.obterNegociacoesDaSemana(), service.obterNegociacoesDaSemanaAnterior(), service.obterNegociacoesDaSemanaRetrasada()])
+      .then(negociacoes => {
+        negociacoes.reduce((arrayConcat, array) => arrayConcat.concat(array), [])
+        .forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+        this._mensagem.texto = 'Negociações importadas com sucesso!';
+      })
+      .catch(error => this._mensagem.texto = error);
   }
   apagar() {
     this._listaNegociacoes.esvaziar();
@@ -33,12 +32,12 @@ class NegociacaoController {
       DateConverter.textoParaData(this._inputData.value),
       this._inputQuantidade.value,
       this._inputValor.value,
-    );
+      );
+    }
+    _limpaFormulario() {
+      this._inputData.value = '';
+      this._inputQuantidade.value = 1;
+      this._inputValor.value = 0.0;
+      this._inputData.focus();
+    }
   }
-  _limpaFormulario() {
-    this._inputData.value = '';
-    this._inputQuantidade.value = 1;
-    this._inputValor.value = 0.0;
-    this._inputData.focus();
-  }
-}
