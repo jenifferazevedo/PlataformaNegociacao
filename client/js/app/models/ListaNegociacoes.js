@@ -4,6 +4,7 @@ constructor() {
   }
   adiciona(negociacao) {
     this._negociacoes.push(negociacao);
+    console.log(negociacao);
   }
   esvaziar() {
     this._negociacoes = [];

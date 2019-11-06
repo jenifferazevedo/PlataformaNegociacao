@@ -20,6 +20,7 @@ class NegociacaoController {
       .then(negociacoes => {
         negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
         this._mensagem.texto = 'Negociações importadas com sucesso!';
+        console.log(negociacoes);
       })
       .catch(error => this._mensagem.texto = error);
   }
