@@ -5,9 +5,11 @@
   <title>Negociações</title>
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/bootstrap-theme.css">
+  <link rel="stylesheet" href="css/mystyle.css">
 </head>
 
 <body class="container">
+  <h1 class="text-center">Enviar Negociações ao Server</h1>
   <form class="form">
 
     <div class="form-group">
@@ -27,7 +29,7 @@
 
     <button class="btn btn-primary" type="submit" onclick="sendPost(event)">Enviar dados para servidor</button>
   </form>
-
+  <script src="js/app/services/HttpService.js"></script>
   <script>
 
     function sendPost(event) {
@@ -43,23 +45,15 @@
         quantidade: inputQuantidade.value,
         valor: inputValor.value,
       }
-      let xhr = new XMLHttpRequest();
-      xhr.open('POST', '/negociacoes', true);
-      xhr.setRequestHeader('Content-type', 'application/json');
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState == 4) {
-          if (xhr.status == 200) {
-            inputData.value = '';
-            inputQuantidade.value = 1;
-            inputValor.value = 0.0;
-            inputData.focus();
-            alert('Negociação enviada com sucesso');
-          } else {
-            alert(`Não foi possível enviar a negociação: ${xhr.responseText}`);
-          }
-        }
-      }
-      xhr.send(JSON.stringify(negociacao));
+      new HttpService().post('/negociacoes', negociacao)
+      .then(() => {
+        inputData.value = '';
+        inputQuantidade = 1;
+        inputValor = 0.0;
+        inputData.focus();
+        alert('Negociação enviada com sucesso!');
+      })
+      .catch(error => alert(`Não foi possível enviar a negociação ao servidor: ${error}`));
     }
   </script>
 </body>
