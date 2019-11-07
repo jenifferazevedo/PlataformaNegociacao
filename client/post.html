@@ -29,20 +29,9 @@
 
     <button class="btn btn-primary" type="submit" onclick="sendPost(event)">Enviar dados para servidor</button>
   </form>
-  <script src="js/app/models/Negociacao.js"></script>
-  <script src="js/app/controllers/NegociacaoController.js"></script>
-  <script src="js/app/helpers/DateConverter.js"></script>
-  <script src="js/app/models/ListaNegociacoes.js"></script>
-  <script src="js/app/views/View.js"></script>
-  <script src="js/app/views/NegociacoesView.js"></script>
-  <script src="js/app/models/Mensagem.js"></script>
-  <script src="js/app/views/MensagemView.js"></script>
-  <script src="js/app/services/ProxyFactory.js"></script>
-  <script src="js/app/helpers/Bind.js"></script>
   <script src="js/app/services/HttpService.js"></script>
-  <script src="js/app/services/NegociacaoService.js"></script>
   <script>
-
+      
     function sendPost(event) {
 
       event.preventDefault();
@@ -52,22 +41,22 @@
       this._inputData = $('#data');
       this._inputQuantidade = $('#quantidade');
       this._inputValor = $('#valor');
-      
-      // let adicionar1 = function(data) {
-      //   data.split('-').forEach((item, index) => {
-      //     if(item[1] == "2019" && item[2] > "10") {
-      //       return item[3] + 1;
-      //       console.log(item[3])
-      //     } else if(item[1] > "2019") {
-      //       return item[3] + 1;
-      //     }
-      //   }).join('-');
-      // };
-      // let dataTeste = adicionar1(_inputData.value);
+      console.log(this._inputData.value);
+      dataDate = new Date(this._inputData.value);
+      dataMais = `${dataDate.getFullYear()}-${dataDate.getMonth()+1}-${dataDate.getDate()+1}`;
+      // dataConvertida = function() {
+      //   if(dataDate.getFullYear() == 2019 && dataDate.getMonth() > 10) {
+      //     return `${dataDate.getFullYear()}-${dataDate.getMonth()+1}-${dataDate.getDate()+2}`
+      //     } else if(dataDate.getFullYear() > 2019) {
+      //       return `${dataDate.getFullYear()}-${dataDate.getMonth()+1}-${dataDate.getDate()+2}`
+      //       } else {
+      //       return `${dataDate.getFullYear()}-${dataDate.getMonth()+1}-${dataDate.getDate()+1}`};
+      // }
+      // dataTeste = dataConvertida();
       let negociacao = {
-        data: _inputData.value,
-        quantidade: _inputQuantidade.value,
-        valor: _inputValor.value
+        data: dataMais,
+        quantidade: this._inputQuantidade.value,
+        valor: this._inputValor.value
       };
       
       new HttpService().post('/negociacoes', negociacao)
