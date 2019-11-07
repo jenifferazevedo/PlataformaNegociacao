@@ -29,29 +29,53 @@
 
     <button class="btn btn-primary" type="submit" onclick="sendPost(event)">Enviar dados para servidor</button>
   </form>
+  <script src="js/app/models/Negociacao.js"></script>
+  <script src="js/app/controllers/NegociacaoController.js"></script>
   <script src="js/app/helpers/DateConverter.js"></script>
+  <script src="js/app/models/ListaNegociacoes.js"></script>
+  <script src="js/app/views/View.js"></script>
+  <script src="js/app/views/NegociacoesView.js"></script>
+  <script src="js/app/models/Mensagem.js"></script>
+  <script src="js/app/views/MensagemView.js"></script>
+  <script src="js/app/services/ProxyFactory.js"></script>
+  <script src="js/app/helpers/Bind.js"></script>
   <script src="js/app/services/HttpService.js"></script>
+  <script src="js/app/services/NegociacaoService.js"></script>
   <script>
 
     function sendPost(event) {
 
       event.preventDefault();
       console.log("Enviando post");
+
       let $ = document.querySelector.bind(document);
-      inputData = $('#data');
-      inputQuantidade = $('#quantidade');
-      inputValor = $('#valor');
+      this._inputData = $('#data');
+      this._inputQuantidade = $('#quantidade');
+      this._inputValor = $('#valor');
+      
+      // let adicionar1 = function(data) {
+      //   data.split('-').forEach((item, index) => {
+      //     if(item[1] == "2019" && item[2] > "10") {
+      //       return item[3] + 1;
+      //       console.log(item[3])
+      //     } else if(item[1] > "2019") {
+      //       return item[3] + 1;
+      //     }
+      //   }).join('-');
+      // };
+      // let dataTeste = adicionar1(_inputData.value);
       let negociacao = {
-        data: inputData.value,
-        quantidade: inputQuantidade.value,
-        valor: inputValor.value,
-      }
+        data: _inputData.value,
+        quantidade: _inputQuantidade.value,
+        valor: _inputValor.value
+      };
+      
       new HttpService().post('/negociacoes', negociacao)
       .then(() => {
-        inputData.value = '';
-        inputQuantidade.value = 1;
-        inputValor.value = 0.0;
-        inputData.focus();
+        this._inputData.value = '';
+        this._inputQuantidade.value = 1;
+        this._inputValor.value = 0.0;
+        this._inputData.focus();
         alert('Negociação enviada com sucesso!');
       })
       .catch(error => alert(`Não foi possível enviar a negociação ao servidor: ${error}`));
